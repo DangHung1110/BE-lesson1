@@ -1,16 +1,23 @@
-import express from 'express'
-import dotenv from 'dotenv'
+import express from 'express';
+import dotenv from 'dotenv';
+import router from './router/router.js';
 
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT;
 
-app.get('/',(req, res) => {
-    res.send('Hello các bé nha!');
-})
+// 🛠 Thêm middleware để Express hiểu JSON
+app.use(express.json());
 
-app.listen(PORT, ()=> {
-    console.log(`sever is running on http://localhost:${PORT}`);
-})
+app.get('/', (req, res) => {
+    res.send('Hello các bé nha!');
+});
+
+app.use(router);
+
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
+
          
-//senmatic version
+//senmatic version   
