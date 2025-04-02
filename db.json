@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Hung dep zai",
+      "age": 19,
+      "gender": "male"
+    },
+    {
+      "id": 2,
+      "name": "Binh 80 can",
+      "age": 20,
+      "gender": "female"
+    },
+    {
+      "id": 3,
+      "name": "Huy mat lon",
+      "age": 19,
+      "gender": "female"
+    }
+  ]
+}
