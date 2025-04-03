@@ -7,12 +7,14 @@ const dbPath = path.join(process.cwd(), "db.json");
 
 // Hàm đọc dữ liệu từ db.json
 const ReadDB = () => {
+    //  nên dùng try-catch kết hợp với async/await đễ xử lý lỡ kh may đọc file thấi bại 
     const data = fs.readFileSync(dbPath, "utf8");
     return JSON.parse(data);
 };
 
 // Hàm ghi dữ liệu vào db.json
 const WriteDB = (data) => {
+    // nên dùng try-catch kết hợp với async/await để xử lý lỡ may ghi file thất bại
     fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), "utf8");
 };
 
