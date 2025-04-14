@@ -1,0 +1,59 @@
+extends layout
+
+block content
+  style.
+    form {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+
+  h1= user ? "Edit User" : "Add User"
+
+  form(action="/save", method="POST")
+    if user
+      input(type="hidden", name="id", value=user.id)
+    
+    label(for="name") Name:
+    input(type="text", name="name", id="name", required, value=user ? user.name : "")
+
+    label(for="handle") Handle:
+    input(type="text", name="handle", id="handle", required, value=user ? user.handle : "")
+
+    button(type="submit") Save

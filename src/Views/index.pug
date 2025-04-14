@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1 Table Title
+
+  a(href="/form", style="background: #3490dc; color: white; padding: 10px; margin-right: 10px; border-radius: 5px; text-decoration: none;") Add New
+  a(href="/form/1", style="background: #f9c74f; color: white; padding: 10px; border-radius: 5px; text-decoration: none;") Edit
+
+  table(border="1", cellpadding="10", cellspacing="0", style="margin-top: 20px; width: 100%;")
+    thead
+      tr
+        th #
+        th Name
+        th Handle
+        th Actions
+    tbody
+      each user in users
+        tr
+          td #{user.id}
+          td #{user.name}
+          td #{user.handle || 'N/A'}
+          td
+            a(href=`/form/${user.id}`, style="background: #38c172; color: white; padding: 5px 10px; margin-right: 5px; border-radius: 5px; text-decoration: none;") Edit
+            a(href=`/delete/${user.id}`, style="background: #e3342f; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none;") Delete
