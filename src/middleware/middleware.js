@@ -1,31 +1,42 @@
-export const validateUser = (req, res, next) => {
-    const { name, email, gender, age, phone } = req.body;
+import User from "../model/UserModel.js";
 
-    if (!name || !email || !gender || !age || !phone) {
-        return res.status(400).json({ message: "Missing required fields!" });
+class UserValidator {
+  checkUserValidate = async (req, res, next) => {
+    const user = req.body;
+    const id = req.params.id || "";
+
+    if (!user.name) {
+      return res.status(400).json({ status: false, message: "Name is required" });
+    }
+    if (user.name.trim().length < 10) {
+      return res.status(400).json({ status: false, message: "Name must be at least 10 characters" });
     }
 
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    if (!emailRegex.test(email)) {
-        return res.status(400).json({ message: "Invalid email format!" });
+    if (!user.email) {
+      return res.status(400).json({ status: false, message: "Email is required" });
+    }
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email);
+    if (!isEmailValid) {
+      return res.status(400).json({ status: false, message: "Email is invalid" });
     }
 
-    if (gender !== "male" && gender !== "female") {
-        return res.status(400).json({ message: "Gender must be 'male' or 'female'!" });
+    const emailFilter = id ? { email: user.email, _id: { $ne: id } } : { email: user.email };
+    const emailExists = await User.findOne(emailFilter);
+    if (emailExists) {
+      return res.status(400).json({ status: false, message: "Email already exists" });
     }
 
-    if (!Number.isInteger(age) || age <= 0 || age >= 100) {
-        return res.status(400).json({ message: "Age must be an integer between 1 and 99!" });
+    if (user.age === undefined || user.age === null) {
+      return res.status(400).json({ status: false, message: "Age is required" });
     }
 
-    if (name.length < 10) {
-        return res.status(400).json({ message: "Full name must be at least 10 characters long!" });
-    }
-
-    const phoneRegex = /^09\d{9}$/;
-    if (!phoneRegex.test(phone)) {
-        return res.status(400).json({ message: "Invalid phone number format!" });
+    const parsedAge = parseInt(user.age, 10);
+    if (isNaN(parsedAge) || parsedAge <= 0 || parsedAge > 100) {
+      return res.status(400).json({ status: false, message: "Age is invalid" });
     }
 
     next();
-};
+  };
+}
+
+export default UserValidator;

@@ -1,11 +1,22 @@
-import { Router } from "express";
+import { Router as ExpressRouter } from "express";
 import userController from "../Controller/usercontroller.js";
+import UserValidator from "../middleware/middleware.js";
 
-const router = Router();
+class AppRouter {
+  constructor() {
+    this.router = ExpressRouter();
+    this.userController = new userController();
+    this.userValidator = new UserValidator();
+    this.setupRoutes();
+  }
 
-router.get('/users', userController.getUsers);
-router.get('/form/:id?', userController.getUserForm);
-router.post('/save', userController.saveUser);
-router.get('/delete/:id', userController.deleteUser);
+  setupRoutes() {
+    this.router.get("/users", this.userController.getAllUsers); // get all users
+    this.router.get("/users/:id", this.userController.getUserById); // get user by id
+    this.router.post("/users", this.userValidator.checkUserValidate, this.userController.addUser); // add user
+    this.router.put("/users/:id", this.userValidator.checkUserValidate, this.userController.updateUser); // update user
+    this.router.delete("/users/:id", this.userController.deleteUser); // delete user
+  }
+}
 
-export default router;
+export default AppRouter;
