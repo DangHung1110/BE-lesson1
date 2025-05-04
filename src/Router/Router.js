@@ -1,6 +1,7 @@
 import { Router as ExpressRouter } from "express";
 import userController from "../Controller/usercontroller.js";
 import UserValidator from "../middleware/middleware.js";
+import upload from "../middleware/multer.js";
 
 class AppRouter {
   constructor() {
@@ -16,6 +17,7 @@ class AppRouter {
     this.router.post("/users", this.userValidator.checkUserValidate, this.userController.addUser); // add user
     this.router.put("/users/:id", this.userValidator.checkUserValidate, this.userController.updateUser); // update user
     this.router.delete("/users/:id", this.userController.deleteUser); // delete user
+    this.router.post('/upload', upload.single('image'), this.userController.uploadImage); // upload image
   }
 }
 

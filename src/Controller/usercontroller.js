@@ -2,14 +2,14 @@ import user from "../model/UserModel.js";
 import UserService from "../service/userService.js";
 
 class userController {
-    constructor () {
+    constructor() {
         this.userService = new UserService();
     }
 
     getAllUsers = async (req, res) => {
         try {
             const users = await this.userService.getAllUsers();
-            if(!users){
+            if (!users) {
                 return res.status(404).json({ message: 'No users found' });
             }
             res.status(200).json(users);
@@ -34,7 +34,7 @@ class userController {
     addUser = async (req, res) => {
         const User = req.body;
         try {
-            const newUser = await this.userService.AddUser( User);
+            const newUser = await this.userService.AddUser(User);
             res.status(201).json(newUser);
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -42,7 +42,7 @@ class userController {
     }
 
     updateUser = async (req, res) => {
-        const  id  = req.params.id;
+        const id = req.params.id;
         const User = req.body;
         try {
             const updatedUser = await this.userService.UpdateUser(id, User);
@@ -56,7 +56,7 @@ class userController {
     }
 
     deleteUser = async (req, res) => {
-        const id  = req.params.id;
+        const id = req.params.id;
         try {
             const deletedUser = await this.userService.DeleteUser(id);
             if (!deletedUser) {
@@ -65,6 +65,22 @@ class userController {
             res.status(200).json({ message: 'User deleted successfully' });
         } catch (error) {
             res.status(500).json({ message: error.message });
+        }
+    }
+
+    uploadImage = async (req, res) => {
+        try {
+            console.log("Request body:", req.body);
+            console.log("Request file:", req.file);
+            
+            const file = req.file;
+            if (!file) return res.status(400).json({ error: 'No file uploaded' });
+    
+            const result = await this.userService.uploadtoCloudinary(file.path);
+            res.status(200).json({ url: result.secure_url });
+        } catch (err) {
+            console.error("Upload error:", err);
+            res.status(500).json({ error: err.message });
         }
     }
 }

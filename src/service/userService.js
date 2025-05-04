@@ -1,4 +1,6 @@
 import user from '../model/UserModel.js';
+import cloudinary from '../../cloundinary.js';
+
 class UserService {
     constructor() {
         this.ModelUser = user;
@@ -67,6 +69,20 @@ class UserService {
         }
         catch (error) {
             throw new Error('Error deleting user: ' + error.message);
+        }
+    }
+
+    uploadtoCloudinary = async (filePath) => {
+        try {
+            const result = await cloudinary.uploader.upload(filePath, {
+                folder: 'user',
+                width: 500,
+                height: 500,
+                crop: 'scale'
+            });
+            return result;
+        } catch (error) {
+            throw new Error('Error uploading image to Cloudinary: ' + error.message);
         }
     }
 }
