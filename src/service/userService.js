@@ -83,7 +83,7 @@ class UserService {
             return result;
         } catch (error) {
             throw new Error('Error uploading image to Cloudinary: ' + error.message);
-        }
+        } 
     }
 }
 
