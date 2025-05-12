@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import User from '../model/UserModel.js';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
+import { decode } from 'punycode';
 dotenv.config();
 
 const SECRET_KEY = process.env.TOKEN_SECRET_KEY
@@ -49,12 +50,12 @@ class AuthService {
                     if (err) {
                         return reject(new Error('Invalid refresh token'));
                     }
-                    const payload = { id: user._id, email: user.email };
+                    console.log(user);
+                    const payload = { id: user.id, email: user.email }; 
+                    console.log(payload);
+                    const newAccessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '15m' });
 
-                    const newAccessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '3m' });
-                    const newRefreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '7d' });
-
-                    resolve({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+                    resolve({ accessToken: newAccessToken });
                 });
             }
         })
@@ -68,7 +69,6 @@ class AuthService {
         const user = await User.findById(userId).select('-password');
         return user;
     }
-
 }
 
 export default AuthService;

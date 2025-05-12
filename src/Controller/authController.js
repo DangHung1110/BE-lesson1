@@ -6,7 +6,7 @@ class AuthController {
     async register(req, res) {
         try {
             const user = await service.register(req.body);
-            res.status(201).json({ message: 'Registered successfully', user });
+            res.status(201).json({ message: 'Registered successfully' });
         } catch (error) {
             res.status(400).json({ error: error.message });
         }
@@ -32,16 +32,9 @@ class AuthController {
 
     async refreshToken(req, res) {
         try {
-            const oldRefreshToken = req.body.refreshToken;
-            
-            const { accessToken, refreshToken } = await service.refreshToken(oldRefreshToken);
+            const oldRefreshToken = req.cookies.refreshToken;
 
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-                maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-            });
+            const { accessToken } = await service.refreshToken(oldRefreshToken);
 
             res.status(200).json({
                 message: 'Token refreshed successfully',
@@ -51,6 +44,7 @@ class AuthController {
             res.status(401).json({ error: error.message });
         }
     }
+
 
     async logout(req, res) {
         try {
@@ -72,7 +66,7 @@ class AuthController {
 
     async getCurrentUser(req, res) {
         try {
-            const userId = req.user.id; 
+            const userId = req.user.id;
             const user = await service.getUserById(userId);
 
             if (!user) {
@@ -84,8 +78,6 @@ class AuthController {
             res.status(500).json({ message: 'Lỗi server', error: err.message });
         }
     }
-
-
 }
 
 export default AuthController;
