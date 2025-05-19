@@ -1,5 +1,5 @@
 import user from '../model/UserModel.js';
-import cloudinary from '../../cloundinary.js';
+import cloudinary from '../config/cloundinary.js';
 
 class UserService {
     constructor() {

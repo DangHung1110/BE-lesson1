@@ -40,3 +40,4 @@ class UserValidator {
 }
 
 export default UserValidator;
+// tạo vvaliator cho user
